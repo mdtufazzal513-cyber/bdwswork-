@@ -1,52 +1,374 @@
-<div style="background: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%); padding:20px; border-radius:15px; font-family:'Segoe UI',Arial,sans-serif; max-width:650px; margin:auto; box-shadow:0 4px 15px rgba(0,0,0,0.2);">
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whatsapp Work BD - ইনকাম লিস্ট</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            animation: shimmer 8s infinite linear;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .client-info {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            flex: 1;
+            min-width: 300px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .client-details h2 {
+            color: #2E7D32;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .client-details p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        
+        .date-display {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        
+        .income-section {
+            flex: 2;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .income-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-bottom: 20px;
+        }
+        
+        .income-table th {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .income-table tr {
+            border-bottom: 1px dashed #e0e0e0;
+            animation: fadeInRow 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .income-table tr:nth-child(1) { animation-delay: 0.1s; }
+        .income-table tr:nth-child(2) { animation-delay: 0.2s; }
+        .income-table tr:nth-child(3) { animation-delay: 0.3s; }
+        .income-table tr:nth-child(4) { animation-delay: 0.4s; }
+        .income-table tr:nth-child(5) { animation-delay: 0.5s; }
+        
+        .income-table td {
+            padding: 18px 16px;
+            font-size: 16px;
+        }
+        
+        .number-cell {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .amount-cell {
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: right;
+        }
+        
+        .separator {
+            text-align: center;
+            color: #888;
+            background: #f9f9f9;
+        }
+        
+        .separator td {
+            padding: 8px;
+            font-size: 14px;
+        }
+        
+        .loading {
+            color: #FF9800 !important;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            animation: fadeIn 1.2s ease-out;
+        }
+        
+        .summary-item {
+            margin: 10px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            min-width: 200px;
+            animation: bounceIn 1s ease-out;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            background: #f5f5f5;
+            animation: fadeIn 1.4s ease-out;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeInRow {
+            from { 
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            .income-table {
+                font-size: 14px;
+            }
+            
+            .income-table th, 
+            .income-table td {
+                padding: 12px 10px;
+            }
+            
+            .summary {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fab fa-whatsapp"></i> Whatsapp work BD</h1>
+            <p>ইনকাম লিস্ট ট্র্যাকার - রিয়েল টাইম আপডেট</p>
+        </div>
 
-  <h2 style="text-align:center; color:#fff; font-size:26px; font-weight:bold; margin-bottom:15px; letter-spacing:1px;">
-    📋 Whatsapp Work BD - Income List
-  </h2>
+        <div class="content-wrapper">
+            <div class="client-info">
+                <div class="client-details">
+                    <h2><i class="fas fa-user"></i> ক্লায়েন্ট তথ্য</h2>
+                    <p><strong>নাম:</strong> রিফাত</p>
+                    <p><strong>আইডি:</strong> WBBD-2023-087</p>
+                    <div class="date-display">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span id="current-date">লোড হচ্ছে...</span>
+                    </div>
+                </div>
+            </div>
 
-  <p style="color:#fff; font-size:18px; margin-bottom:10px;"><b>Name:</b> Rifat</p>
+            <div class="income-section">
+                <table class="income-table">
+                    <thead>
+                        <tr>
+                            <th>নম্বর</th>
+                            <th style="text-align: right;">বোনাস টাকা</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="number-cell">1) 01720904503</td>
+                            <td class="amount-cell">0 টাকা 💸</td>
+                        </tr>
+                        <tr class="separator">
+                            <td colspan="2">—-------------------------------------------------------------</td>
+                        </tr>
+                        <tr>
+                            <td class="number-cell">2) 01626580252</td>
+                            <td class="amount-cell">0 টাকা 💸</td>
+                        </tr>
+                        <tr class="separator">
+                            <td colspan="2">—-------------------------------------------------------------</td>
+                        </tr>
+                        <tr>
+                            <td class="number-cell">3) 01814233211</td>
+                            <td class="amount-cell">0 টাকা 💸</td>
+                        </tr>
+                        <tr class="separator">
+                            <td colspan="2">—-------------------------------------------------------------</td>
+                        </tr>
+                        <tr>
+                            <td class="number-cell">4) 01623963131</td>
+                            <td class="amount-cell">0 টাকা 💸</td>
+                        </tr>
+                        <tr class="separator">
+                            <td colspan="2">—-------------------------------------------------------------</td>
+                        </tr>
+                        <tr>
+                            <td class="number-cell loading">5) ....লোড হচ্ছে <i class="fas fa-spinner fa-spin"></i></td>
+                            <td class="amount-cell loading">....লোড হচ্ছে 💸</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-  <table style="width:100%; border-collapse:collapse; font-size:16px; background:#fff; border-radius:10px; overflow:hidden;">
-    <tr style="background:#333; color:#fff;">
-      <th style="padding:10px; text-align:left;">Numbers</th>
-      <th style="padding:10px; text-align:center;">Bonus Tk.</th>
-      <th style="padding:10px; text-align:center;">Status</th>
-    </tr>
+        <div class="summary">
+            <div class="summary-item">
+                <i class="fas fa-check-circle"></i> অ্যাক্টিভ = 3 নম্বর
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-coins"></i> মোট = ... টাকা 💸
+            </div>
+        </div>
 
-    <tr style="background:#f9f9f9;">
-      <td style="padding:10px;">01720904503</td>
-      <td style="padding:10px; text-align:center;">0 Taka 💸</td>
-      <td style="padding:10px; text-align:center; font-weight:bold; color:#16a34a;">✅ Active</td>
-    </tr>
+        <div class="footer">
+            <p>সর্বশেষ আপডেট: <span id="update-time">লোড হচ্ছে...</span></p>
+            <p>© 2023 Whatsapp Work BD. সকল права সংরক্ষিত।</p>
+        </div>
+    </div>
 
-    <tr style="background:#fff;">
-      <td style="padding:10px;">01626580252</td>
-      <td style="padding:10px; text-align:center;">0 Taka 💸</td>
-      <td style="padding:10px; text-align:center; font-weight:bold; color:#16a34a;">✅ Active</td>
-    </tr>
-
-    <tr style="background:#f9f9f9;">
-      <td style="padding:10px;">01814233211</td>
-      <td style="padding:10px; text-align:center;">0 Taka 💸</td>
-      <td style="padding:10px; text-align:center; font-weight:bold; color:#dc2626;">❌ Offline</td>
-    </tr>
-
-    <tr style="background:#fff;">
-      <td style="padding:10px;">01623963131</td>
-      <td style="padding:10px; text-align:center;">0 Taka 💸</td>
-      <td style="padding:10px; text-align:center; font-weight:bold; color:#dc2626;">❌ Offline</td>
-    </tr>
-
-    <tr style="background:#f9f9f9;">
-      <td style="padding:10px;">....Loading</td>
-      <td style="padding:10px; text-align:center;">… Loading 💸</td>
-      <td style="padding:10px; text-align:center; font-weight:bold; color:#f97316;">⏳ Waiting</td>
-    </tr>
-  </table>
-
-  <hr style="margin:20px 0; border:1px solid #ddd;">
-
-  <p style="font-size:18px; text-align:center; font-weight:bold; color:#fff;">
-    ✅ Active = 2 Number &nbsp; | &nbsp; 💰 Total = …. Taka
-  </p>
-</div>
+    <script>
+        // বর্তমান তারিখ এবং সময় দেখানোর জন্য
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            
+            document.getElementById('current-date').textContent = now.toLocaleDateString('bn-BD', dateOptions);
+            document.getElementById('update-time').textContent = now.toLocaleTimeString('bn-BD', timeOptions);
+        }
+        
+        // পৃষ্ঠা লোড হলে তারিখ和时间 আপডেট করুন
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            
+            // প্রতি সেকেন্ডে সময় আপডেট
+            setInterval(updateDateTime, 1000);
+        });
+    </script>
+</body>
+</html>
